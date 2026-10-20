@@ -50,12 +50,11 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 #next{width:100%;display:block;margin-top:5px;aspect-ratio:1}
 #nextAfter{width:70%;display:block;margin:4px auto 0;aspect-ratio:1}
 .side-tile.after{padding:6px 2px;font-size:9px;opacity:.88}
-.drop-row{width:100%;max-width:410px;display:flex;justify-content:center;padding-top:6px;flex:0 0 auto}
-.drop-row .ctrl{width:48%;min-height:42px;height:42px;font-size:18px;border-radius:11px}
-.drop-row .ctrl small{display:inline;margin-left:8px;font-size:12px}
-
+/* 즉시 낙하 버튼은 기존 오른쪽 끝 위치를 유지하고 한 버튼 높이만큼 위로 이동 */
+#dropBtn{position:absolute;right:0;bottom:calc(100% + 8px);width:calc((100% - 24px)/4);height:calc(100% - 11px);min-height:0;z-index:5}
+#dropBtn small{display:block;margin-top:3px;font-size:10px}
 .side-caption{line-height:1.35;font-size:10px;color:#96abc8;margin-top:8px}
-.controls{width:100%;max-width:410px;flex:1;min-height:65px;max-height:106px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:stretch;padding-top:7px;padding-bottom:4px}
+.controls{position:relative;width:100%;max-width:410px;flex:1;min-height:65px;max-height:106px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:stretch;padding-top:7px;padding-bottom:4px}
 .ctrl{background:linear-gradient(#293c5a,#1b2942);border:1px solid #526888;border-bottom:4px solid #10192c;border-radius:14px;font-size:23px;min-width:0;min-height:65px;box-shadow:0 6px 15px #0005}
 .ctrl small{display:block;font-size:10px;margin-top:3px;font-weight:700;color:#b7d2e9}
 .ctrl.turn{background:linear-gradient(#564477,#30274e);border-color:#7665a5}
@@ -68,7 +67,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .modal{background:linear-gradient(145deg,#1b2b45,#111b2e);border:1px solid #526481;border-radius:22px;width:min(100%,350px);padding:32px 24px;display:flex;flex-direction:column;align-items:stretch;gap:12px;text-align:center;box-shadow:0 24px 70px #000b}
 .modal h2{font-size:32px;margin:0 0 6px}.modal p{font-size:14px;color:#b9cde4;margin:0 0 15px;line-height:1.6}
 .modal .primary,.modal .secondary{height:54px;font-size:17px}
-@media (max-height:690px){.topbar{min-height:35px}.hud{padding:3px 0}.hud-cell{padding:3px}.controls{padding-top:4px;min-height:54px}.drop-row .ctrl{height:36px;min-height:36px}.ctrl{min-height:47px;font-size:18px}.ctrl small{font-size:9px}}
+@media (max-height:690px){.topbar{min-height:35px}.hud{padding:3px 0}.hud-cell{padding:3px}.controls{padding-top:4px;min-height:54px}#dropBtn{height:calc(100% - 8px)}.ctrl{min-height:47px;font-size:18px}.ctrl small{font-size:9px}}
 </style>
 </head>
 <body>
@@ -82,8 +81,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
  <div class="topbar"><div class="brand">BLOCK CLASSIC</div><div class="top-actions"><button id="soundBtn" class="small" aria-label="소리 끄기">🔊</button><button id="pauseBtn" class="small">Ⅱ 일시정지</button></div></div>
  <div class="hud"><div class="hud-cell"><div class="lab">점수</div><div id="score" class="val">0</div></div><div class="hud-cell"><div class="lab">레벨</div><div id="level" class="val">1</div></div><div class="hud-cell"><div class="lab">제거 줄</div><div id="lines" class="val">0</div></div><div class="hud-cell"><div class="lab">최고점</div><div id="best" class="val">0</div></div></div>
  <div class="field-line"><div class="board-wrap"><canvas id="board" width="300" height="600" aria-label="테트리스 게임판"></canvas><canvas id="effects" width="300" height="600"></canvas><div id="toast" role="status"></div></div><aside class="side"><div class="side-tile">다음 블록<canvas id="next" width="104" height="104"></canvas></div><div class="side-tile after">다다음 블록<canvas id="nextAfter" width="104" height="104" aria-label="다다음 블록 미리보기"></canvas></div><div id="comboSide" class="side-tile" style="display:none;color:#ffe598">COMBO<br><span id="comboN" style="font-size:20px">×2</span></div><div class="side-caption">블록판을<br>터치하면 회전<br>드래그로 이동</div></aside></div>
- <div class="drop-row"><button class="ctrl drop" id="dropBtn" aria-label="즉시 낙하">⤓<small>즉시</small></button></div>
- <div class="controls"><button class="ctrl" id="leftBtn" aria-label="왼쪽 이동">◀<small>왼쪽</small></button><button class="ctrl turn" id="turnBtn" aria-label="회전">⟳<small>회전</small></button><button class="ctrl" id="downBtn" aria-label="빠른 낙하">▼<small>내리기</small></button><button class="ctrl" id="rightBtn" aria-label="오른쪽 이동">▶<small>오른쪽</small></button></div>
+ <div class="controls"><button class="ctrl" id="leftBtn" aria-label="왼쪽 이동">◀<small>왼쪽</small></button><button class="ctrl turn" id="turnBtn" aria-label="회전">⟳<small>회전</small></button><button class="ctrl" id="downBtn" aria-label="빠른 낙하">▼<small>내리기</small></button><button class="ctrl" id="rightBtn" aria-label="오른쪽 이동">▶<small>오른쪽</small></button><button class="ctrl drop" id="dropBtn" aria-label="즉시 낙하">⤓<small>즉시</small></button></div>
  <div class="overlay" id="pauseOverlay"><div class="modal"><h2>일시정지</h2><p>게임 진행이 멈췄습니다.</p><button id="resumeBtn" class="primary">▶ 계속하기</button><button id="menuBtn" class="secondary">⌂ 메인 메뉴로</button></div></div>
  <div class="overlay" id="overOverlay"><div class="modal"><h2>게임 종료!</h2><p id="finalScore">점수 0점</p><button id="retryBtn" class="primary">↻ 다시 시작</button><button id="overMenuBtn" class="secondary">⌂ 메인 메뉴로</button></div></div>
 </section>
@@ -142,14 +140,14 @@ function lock(){if(status!=='playing'||!piece)return;for(const [a,b] of piece.c)
  if(cnt>0){grid=Array.from({length:cnt},()=>Array(COLS).fill(null)).concat(keep);let old=score;combo++;const multiplier=combo+1;const gained=SCORE[cnt]*multiplier;score+=gained;lines+=cnt;level=1+Math.floor(lines/20);
     effect(cnt);const label=['','SINGLE','DOUBLE','TRIPLE','TETRIS!'][cnt];let extra=combo>0?`<small>${multiplier} COMBO! · 점수 ×${multiplier}</small>`:'';
     toast(`${label} +${gained.toLocaleString('ko-KR')}${extra}`,1100);if(combo>0){$('comboSide').style.display='block';$('comboN').textContent=`×${combo+1}`;}else{$('comboSide').style.display='none';}
-    if(Math.floor(score/5000)>Math.floor(old/5000)){fireworks();boomSound();}
+    if(Math.floor(score/5000)>Math.floor(old/5000)){fireworks(Math.floor(score/5000)*5000);boomSound();}
  } else{combo=-1;$('comboSide').style.display='none';}
  if(score>best){best=score;persist();}
  spawn();updateHud();draw();}
 function hardDrop(){if(status!=='playing')return;while(move(0,1)){}lock();fallAccum=0;}
 function toast(text,ms=1000){clearTimeout(toastTimeout);$('toast').innerHTML=text;$('toast').classList.add('show');toastTimeout=setTimeout(()=>$('toast').classList.remove('show'),ms);}
-function fireworks(){for(let k=0;k<6;k++){let cx=25+Math.random()*250,cy=35+Math.random()*330;const color=['#ffd86d','#56e5e9','#f879ae','#d8a5ff','#b1f89c'][k%5];for(let i=0;i<28;i++){let a=(i/28)*Math.PI*2,s=1.8+Math.random()*3.5;particles.push({x:cx,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:65+Math.random()*25,max:90,color});}}
- toast('🎆 5,000점 구간 돌파! 🎆',1800);}
+function fireworks(milestone){for(let k=0;k<6;k++){let cx=25+Math.random()*250,cy=35+Math.random()*330;const color=['#ffd86d','#56e5e9','#f879ae','#d8a5ff','#b1f89c'][k%5];for(let i=0;i<28;i++){let a=(i/28)*Math.PI*2,s=1.8+Math.random()*3.5;particles.push({x:cx,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:65+Math.random()*25,max:90,color});}}
+ toast(`🎆 ${milestone.toLocaleString('ko-KR')}점 돌파! 🎆`,1800);}
 function gameOver(){status='over';stopMusic();if(score>best){best=score;persist();}updateHud();$('finalScore').textContent=`최종 점수 ${score.toLocaleString('ko-KR')}점 · 최고 ${best.toLocaleString('ko-KR')}점`;$('overOverlay').classList.add('active');}
 function updateHud(){$('score').textContent=score.toLocaleString('ko-KR');$('level').textContent=level;$('lines').textContent=lines;$('best').textContent=best.toLocaleString('ko-KR');$('menuBest').textContent=best.toLocaleString('ko-KR');}
 function cell(c,x,y,color,s=SIZE,opacity=1){if(y<0)return;const px=x*s,py=y*s;c.globalAlpha=opacity;c.fillStyle=color;c.fillRect(px+1,py+1,s-2,s-2);c.fillStyle='#ffffff5d';c.fillRect(px+3,py+3,s-6,3);c.fillStyle='#00000027';c.fillRect(px+3,py+s-6,s-6,3);c.strokeStyle='#101e31';c.lineWidth=1;c.strokeRect(px+.5,py+.5,s-1,s-1);c.globalAlpha=1;}
@@ -196,7 +194,7 @@ $('soundBtn').textContent=muted?'🔇':'🔊';
 window.androidBack=()=>{if(status==='playing')pause();else if(status==='paused'||status==='over')menu();else if(status==='playing')pause();};
 document.addEventListener('keydown',e=>{const keys=['ArrowLeft','ArrowRight','ArrowDown','ArrowUp',' ','Escape','p','P'];if(keys.includes(e.key))e.preventDefault();if(e.key==='Escape'||e.key==='p'||e.key==='P'){if(status==='playing')pause();else if(status==='paused')resume();return;}const k={'ArrowLeft':'left','ArrowRight':'right','ArrowDown':'down','ArrowUp':'turn',' ':'drop'}[e.key];if(k)act(k);});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&status==='playing')pause();});
-function resize(){const h=window.innerHeight,w=window.innerWidth,menuHeight=48,hudHeight=61,controlsHeight=Math.max(76,Math.min(115,h*.115)),dropHeight=52,fixed=menuHeight+hudHeight+controlsHeight+dropHeight+36;const bw=Math.max(120,Math.min(360,w-115,(h-fixed)/2));document.documentElement.style.setProperty('--board-w',Math.floor(bw)+'px');}
+function resize(){const h=window.innerHeight,w=window.innerWidth,menuHeight=48,hudHeight=61,controlsHeight=Math.max(76,Math.min(115,h*.115)),fixed=menuHeight+hudHeight+controlsHeight+36;const bw=Math.max(120,Math.min(360,w-115,(h-fixed)/2));document.documentElement.style.setProperty('--board-w',Math.floor(bw)+'px');}
 window.addEventListener('resize',resize);resize();updateHud();draw();requestAnimationFrame(t=>{last=t;requestAnimationFrame(frame)});
 })();
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) { window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {})); }
