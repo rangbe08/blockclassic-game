@@ -50,9 +50,10 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 #next{width:100%;display:block;margin-top:5px;aspect-ratio:1}
 #nextAfter{width:70%;display:block;margin:4px auto 0;aspect-ratio:1}
 .side-tile.after{padding:6px 2px;font-size:9px;opacity:.88}
-/* 즉시 낙하 버튼은 기존 오른쪽 끝 위치를 유지하고 한 버튼 높이만큼 위로 이동 */
-#dropBtn{position:absolute;right:0;bottom:calc(100% + 8px);width:calc((100% - 24px)/4);height:calc(100% - 11px);min-height:0;z-index:5}
-#dropBtn small{display:block;margin-top:3px;font-size:10px}
+/* 즉시 버튼은 게임판이 아닌 오른쪽 정보 패널 내부에 배치합니다. */
+.side{position:relative;height:calc(var(--board-w,280px) * 2)}
+#dropBtn{position:absolute;right:0;bottom:12px;width:min(100%,62px);height:82px;min-height:0;z-index:5;padding:0 1px;font-size:19px;border-radius:10px}
+#dropBtn small{display:block;margin-top:3px;font-size:9px;letter-spacing:-.5px}
 .side-caption{line-height:1.35;font-size:10px;color:#96abc8;margin-top:8px}
 .controls{position:relative;width:100%;max-width:410px;flex:1;min-height:65px;max-height:106px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:stretch;padding-top:7px;padding-bottom:4px}
 .ctrl{background:linear-gradient(#293c5a,#1b2942);border:1px solid #526888;border-bottom:4px solid #10192c;border-radius:14px;font-size:23px;min-width:0;min-height:65px;box-shadow:0 6px 15px #0005}
@@ -67,7 +68,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .modal{background:linear-gradient(145deg,#1b2b45,#111b2e);border:1px solid #526481;border-radius:22px;width:min(100%,350px);padding:32px 24px;display:flex;flex-direction:column;align-items:stretch;gap:12px;text-align:center;box-shadow:0 24px 70px #000b}
 .modal h2{font-size:32px;margin:0 0 6px}.modal p{font-size:14px;color:#b9cde4;margin:0 0 15px;line-height:1.6}
 .modal .primary,.modal .secondary{height:54px;font-size:17px}
-@media (max-height:690px){.topbar{min-height:35px}.hud{padding:3px 0}.hud-cell{padding:3px}.controls{padding-top:4px;min-height:54px}#dropBtn{height:calc(100% - 8px)}.ctrl{min-height:47px;font-size:18px}.ctrl small{font-size:9px}}
+@media (max-height:690px){.topbar{min-height:35px}.hud{padding:3px 0}.hud-cell{padding:3px}.controls{padding-top:4px;min-height:54px}#dropBtn{height:65px;bottom:8px}.ctrl{min-height:47px;font-size:18px}.ctrl small{font-size:9px}}
 </style>
 </head>
 <body>
@@ -80,11 +81,12 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 <section id="game" class="screen" aria-label="게임 화면">
  <div class="topbar"><div class="brand">BLOCK CLASSIC</div><div class="top-actions"><button id="soundBtn" class="small" aria-label="소리 끄기">🔊</button><button id="pauseBtn" class="small">Ⅱ 일시정지</button></div></div>
  <div class="hud"><div class="hud-cell"><div class="lab">점수</div><div id="score" class="val">0</div></div><div class="hud-cell"><div class="lab">레벨</div><div id="level" class="val">1</div></div><div class="hud-cell"><div class="lab">제거 줄</div><div id="lines" class="val">0</div></div><div class="hud-cell"><div class="lab">최고점</div><div id="best" class="val">0</div></div></div>
- <div class="field-line"><div class="board-wrap"><canvas id="board" width="300" height="600" aria-label="테트리스 게임판"></canvas><canvas id="effects" width="300" height="600"></canvas><div id="toast" role="status"></div></div><aside class="side"><div class="side-tile">다음 블록<canvas id="next" width="104" height="104"></canvas></div><div class="side-tile after">다다음 블록<canvas id="nextAfter" width="104" height="104" aria-label="다다음 블록 미리보기"></canvas></div><div id="comboSide" class="side-tile" style="display:none;color:#ffe598">COMBO<br><span id="comboN" style="font-size:20px">×2</span></div><div class="side-caption">블록판을<br>터치하면 회전<br>드래그로 이동</div></aside></div>
- <div class="controls"><button class="ctrl" id="leftBtn" aria-label="왼쪽 이동">◀<small>왼쪽</small></button><button class="ctrl turn" id="turnBtn" aria-label="회전">⟳<small>회전</small></button><button class="ctrl" id="downBtn" aria-label="빠른 낙하">▼<small>내리기</small></button><button class="ctrl" id="rightBtn" aria-label="오른쪽 이동">▶<small>오른쪽</small></button><button class="ctrl drop" id="dropBtn" aria-label="즉시 낙하">⤓<small>즉시</small></button></div>
+ <div class="field-line"><div class="board-wrap"><canvas id="board" width="300" height="600" aria-label="테트리스 게임판"></canvas><canvas id="effects" width="300" height="600"></canvas><div id="toast" role="status"></div></div><aside class="side"><div class="side-tile">다음 블록<canvas id="next" width="104" height="104"></canvas></div><div class="side-tile after">다다음 블록<canvas id="nextAfter" width="104" height="104" aria-label="다다음 블록 미리보기"></canvas></div><div id="comboSide" class="side-tile" style="display:none;color:#ffe598">COMBO<br><span id="comboN" style="font-size:20px">×2</span></div><div class="side-caption">블록판을<br>터치하면 회전<br>드래그로 이동</div><button class="ctrl drop" id="dropBtn" aria-label="즉시 낙하">⤓<small>즉시</small></button></aside></div>
+ <div class="controls"><button class="ctrl" id="leftBtn" aria-label="왼쪽 이동">◀<small>왼쪽</small></button><button class="ctrl turn" id="turnBtn" aria-label="회전">⟳<small>회전</small></button><button class="ctrl" id="downBtn" aria-label="빠른 낙하">▼<small>내리기</small></button><button class="ctrl" id="rightBtn" aria-label="오른쪽 이동">▶<small>오른쪽</small></button></div>
  <div class="overlay" id="pauseOverlay"><div class="modal"><h2>일시정지</h2><p>게임 진행이 멈췄습니다.</p><button id="resumeBtn" class="primary">▶ 계속하기</button><button id="menuBtn" class="secondary">⌂ 메인 메뉴로</button></div></div>
  <div class="overlay" id="overOverlay"><div class="modal"><h2>게임 종료!</h2><p id="finalScore">점수 0점</p><button id="retryBtn" class="primary">↻ 다시 시작</button><button id="overMenuBtn" class="secondary">⌂ 메인 메뉴로</button></div></div>
 </section>
+<audio id="customBgm" src="./audio/arcade-theme.mp3" preload="none" loop></audio>
 <script>
 'use strict';
 (() => {
@@ -100,10 +102,21 @@ const $=id=>document.getElementById(id);
 const board=$('board'),ctx=board.getContext('2d'),fx=$('effects'),fctx=fx.getContext('2d'),nc=$('next'),nctx=nc.getContext('2d'),nextAfterCanvas=$('nextAfter'),actx=nextAfterCanvas.getContext('2d');
 let grid=Array.from({length:ROWS},()=>Array(COLS).fill(null)),piece=null,nextType='I',afterType='O',bag=[],score=0,best=0,lines=0,level=1,combo=-1,status='menu';
 let last=0,fallAccum=0,particles=[],toastTimeout=null,fxMessageTimeout=0,hold=null,gameGeneration=0;
+// 착지 후 0.5초 동안 입력이 없을 때 고정. 좌우/회전/내리기 입력은 유예시간 갱신.
+const LOCK_DELAY=500;
+let groundedSince=null, lockFlash=null;
+function grounded(){return !!piece && !valid(piece.c,piece.x,piece.y+1);}
+function refreshGroundedTimer(){groundedSince=grounded()?performance.now():null;}
+function inputActivity(){if(status==='playing' && grounded())groundedSince=performance.now();}
+
 try{best=Number(localStorage.getItem('blockclassic_best'))||0;}catch(e){}
 let muted=false;try{muted=localStorage.getItem('blockclassic_mute')==='true';}catch(e){}
 const AC=window.AudioContext||window.webkitAudioContext;
 let ac=null,stepTimer=null,musicIndex=0;
+const customBgm=$('customBgm');
+let customTrackAvailable=null;
+customBgm.addEventListener('error',()=>{customTrackAvailable=false;if(status==='playing'&&!muted&&!stepTimer)startSynthMusic();});
+customBgm.addEventListener('canplay',()=>{customTrackAvailable=true;});
 // 러시아 전통 민요 'Korobeiniki'를 직접 합성하는 편곡. 원본 게임 음원 미사용.
 // 음높이 + 길이(8분음표 수)의 독자적 단음 편곡.
 const TUNE=[['E5',2],['B4',1],['C5',1],['D5',2],['C5',1],['B4',1],['A4',2],['A4',1],['C5',1],['E5',2],['D5',1],['C5',1],
@@ -124,18 +137,58 @@ function effect(n){if(!ac||muted)return;const at=ac.currentTime+.01;
  if(n===4){tone(1318.51,at+.36,.37,.12,'triangle');tone(1567.98,at+.46,.40,.1,'sine');}
 }
 function boomSound(){if(!ac||muted)return;const t=ac.currentTime;[523,659,784,1046,1318].forEach((f,i)=>tone(f,t+i*.075,.25,.085,'triangle'));}
-function musicTick(){if(status!=='playing'||muted||!ac)return;const [note,d]=TUNE[musicIndex%TUNE.length];if(musicIndex===0)tone(220,ac.currentTime,.22,.025,'sine');tone(freq(note),ac.currentTime,d*.145*.9,.04,'triangle');musicIndex++;stepTimer=setTimeout(musicTick,d*145);}
-function stopMusic(){clearTimeout(stepTimer);stepTimer=null;}
-function startMusic(){stopMusic();if(!muted){initAudio();musicTick();}}
+// 기본 음원: 전통 민요 Korobeiniki의 자체 합성 아케이드풍 편곡.
+// 사용자가 audio/arcade-theme.mp3에 사용 권한이 있는 음원을 넣으면 해당 음원을 우선 재생합니다.
+function musicVoice(hz,when,duration,volume=.062,bass=false){
+ if(!ac||muted)return;
+ try{
+  const env=ac.createGain(),filter=ac.createBiquadFilter();
+  filter.type='lowpass';filter.frequency.value=bass?1050:3400;
+  env.gain.setValueAtTime(.0001,when);
+  env.gain.linearRampToValueAtTime(volume,when+.007);
+  env.gain.setValueAtTime(volume*.82,when+Math.min(.045,duration*.25));
+  env.gain.exponentialRampToValueAtTime(.0001,when+duration+.045);
+  filter.connect(env);env.connect(ac.destination);
+  const osc=ac.createOscillator();
+  osc.type=bass?'triangle':'square';osc.frequency.setValueAtTime(hz,when);
+  const sub=ac.createOscillator(),subgain=ac.createGain();
+  sub.type='sine';sub.frequency.setValueAtTime(hz*(bass?1:2),when);subgain.gain.value=bass?.20:.10;
+  osc.connect(filter);sub.connect(subgain);subgain.connect(filter);
+  osc.start(when);sub.start(when);osc.stop(when+duration+.06);sub.stop(when+duration+.06);
+ }catch(e){}
+}
+const BASS_NOTES=['A3','E3','F3','C3','G3','D3','E3','A3'];
+function musicTick(){
+ if(status!=='playing'||muted||!ac||customTrackAvailable)return;
+ const [note,d]=TUNE[musicIndex%TUNE.length],now=ac.currentTime;
+ const seconds=d*.145;
+ musicVoice(freq(note),now,Math.max(.09,seconds*.87),.056,false);
+ if(musicIndex%4===0){
+  const bass=BASS_NOTES[Math.floor(musicIndex/4)%BASS_NOTES.length];
+  musicVoice(freq(bass),now,.46,.038,true);
+  musicVoice(freq(bass)*1.5,now+.01,.36,.012,true);
+ }
+ musicIndex++;stepTimer=setTimeout(musicTick,d*145);
+}
+function startSynthMusic(){if(!stepTimer){initAudio();musicTick();}}
+function stopMusic(){clearTimeout(stepTimer);stepTimer=null;customBgm.pause();}
+function startMusic(){
+ stopMusic();if(muted)return;
+ // 별도 MP3가 없거나 브라우저에서 로드할 수 없으면 자체 합성 멜로디 사용
+ if(customTrackAvailable===false){startSynthMusic();return;}
+ const play=customBgm.play();
+ if(play&&typeof play.catch==='function')play.catch(()=>{customTrackAvailable=false;startSynthMusic();});
+ // 파일 존재 여부를 알 수 없는 경우 재생 시도와 별개로 실패 이벤트에서 대체 음악 시작
+}
 function persist(){try{localStorage.setItem('blockclassic_best',String(best))}catch(e){}}
 function shuffleBag(){const arr=Object.keys(SHAPES);for(let i=arr.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
 function drawType(){if(!bag.length)bag=shuffleBag();return bag.pop();}
 function valid(c,x,y){return c.every(([a,b])=>{const xx=x+a,yy=y+b;return xx>=0&&xx<COLS&&yy<ROWS&&(yy<0||grid[yy][xx]===null);});}
-function spawn(){let t=nextType;nextType=afterType;afterType=drawType();const s=SHAPES[t];piece={t,n:s.n,c:s.c.map(a=>[...a]),x:Math.floor((COLS-s.n)/2),y:-1};if(!valid(piece.c,piece.x,piece.y))gameOver();}
-function reset(){gameGeneration++;grid=Array.from({length:ROWS},()=>Array(COLS).fill(null));bag=[];nextType=drawType();afterType=drawType();score=0;lines=0;level=1;combo=-1;particles=[];fallAccum=0;last=performance.now();$('comboSide').style.display='none';$('pauseOverlay').classList.remove('active');$('overOverlay').classList.remove('active');$('toast').classList.remove('show');status='playing';spawn();updateHud();draw();startMusic();}
-function move(dx,dy){if(status!=='playing'||!piece)return false;if(valid(piece.c,piece.x+dx,piece.y+dy)){piece.x+=dx;piece.y+=dy;draw();return true;}return false;}
-function rotate(){if(status!=='playing'||!piece||piece.t==='O')return;const n=piece.n,r=piece.c.map(([x,y])=>[n-1-y,x]);for(const [dx,dy] of [[0,0],[-1,0],[1,0],[-2,0],[2,0],[0,-1]]){if(valid(r,piece.x+dx,piece.y+dy)){piece.c=r;piece.x+=dx;piece.y+=dy;draw();return;}}}
-function lock(){if(status!=='playing'||!piece)return;for(const [a,b] of piece.c){let x=piece.x+a,y=piece.y+b;if(y<0){gameOver();return;}grid[y][x]=piece.t;}
+function spawn(){groundedSince=null;let t=nextType;nextType=afterType;afterType=drawType();const s=SHAPES[t];piece={t,n:s.n,c:s.c.map(a=>[...a]),x:Math.floor((COLS-s.n)/2),y:-1};if(!valid(piece.c,piece.x,piece.y))gameOver();}
+function reset(){gameGeneration++;grid=Array.from({length:ROWS},()=>Array(COLS).fill(null));bag=[];nextType=drawType();afterType=drawType();score=0;lines=0;level=1;combo=-1;particles=[];lockFlash=null;groundedSince=null;fallAccum=0;last=performance.now();$('comboSide').style.display='none';$('pauseOverlay').classList.remove('active');$('overOverlay').classList.remove('active');$('toast').classList.remove('show');status='playing';spawn();updateHud();draw();startMusic();}
+function move(dx,dy){if(status!=='playing'||!piece)return false;if(valid(piece.c,piece.x+dx,piece.y+dy)){piece.x+=dx;piece.y+=dy;refreshGroundedTimer();draw();return true;}return false;}
+function rotate(){if(status!=='playing'||!piece||piece.t==='O')return;const n=piece.n,r=piece.c.map(([x,y])=>[n-1-y,x]);for(const [dx,dy] of [[0,0],[-1,0],[1,0],[-2,0],[2,0],[0,-1]]){if(valid(r,piece.x+dx,piece.y+dy)){piece.c=r;piece.x+=dx;piece.y+=dy;refreshGroundedTimer();draw();return;}}}
+function lock(){if(status!=='playing'||!piece)return;const flashCells=piece.c.map(([a,b])=>({x:piece.x+a,y:piece.y+b,color:COLORS[piece.t]}));for(const [a,b] of piece.c){let x=piece.x+a,y=piece.y+b;if(y<0){gameOver();return;}grid[y][x]=piece.t;}
  let keep=grid.filter(r=>r.some(v=>v===null)),cnt=ROWS-keep.length;
  if(cnt>0){grid=Array.from({length:cnt},()=>Array(COLS).fill(null)).concat(keep);let old=score;combo++;const multiplier=combo+1;const gained=SCORE[cnt]*multiplier;score+=gained;lines+=cnt;level=1+Math.floor(lines/20);
     effect(cnt);const label=['','SINGLE','DOUBLE','TRIPLE','TETRIS!'][cnt];let extra=combo>0?`<small>${multiplier} COMBO! · 점수 ×${multiplier}</small>`:'';
@@ -143,6 +196,8 @@ function lock(){if(status!=='playing'||!piece)return;for(const [a,b] of piece.c)
     if(Math.floor(score/5000)>Math.floor(old/5000)){fireworks(Math.floor(score/5000)*5000);boomSound();}
  } else{combo=-1;$('comboSide').style.display='none';}
  if(score>best){best=score;persist();}
+ // 고정된 순간에 잠깐 밝게 빛나며 사라지는 연출
+ lockFlash={cells:flashCells,start:performance.now(),duration:270};
  spawn();updateHud();draw();}
 function hardDrop(){if(status!=='playing')return;while(move(0,1)){}lock();fallAccum=0;}
 function toast(text,ms=1000){clearTimeout(toastTimeout);$('toast').innerHTML=text;$('toast').classList.add('show');toastTimeout=setTimeout(()=>$('toast').classList.remove('show'),ms);}
@@ -162,15 +217,42 @@ function draw(){ctx.fillStyle='#0f1b2e';ctx.fillRect(0,0,300,600);ctx.strokeStyl
  drawPreview(nctx,nextType);drawPreview(actx,afterType);
 }
 function pause(){if(status!=='playing')return;status='paused';stopMusic();$('pauseOverlay').classList.add('active');}
-function resume(){if(status!=='paused')return;status='playing';last=performance.now();fallAccum=0;$('pauseOverlay').classList.remove('active');startMusic();}
-function menu(){status='menu';stopMusic();particles=[];$('game').classList.remove('active');$('menu').classList.add('active');$('pauseOverlay').classList.remove('active');$('overOverlay').classList.remove('active');updateHud();}
+function resume(){if(status!=='paused')return;status='playing';last=performance.now();fallAccum=0;refreshGroundedTimer();$('pauseOverlay').classList.remove('active');startMusic();}
+function menu(){status='menu';groundedSince=null;lockFlash=null;stopMusic();particles=[];$('game').classList.remove('active');$('menu').classList.add('active');$('pauseOverlay').classList.remove('active');$('overOverlay').classList.remove('active');updateHud();}
 function frame(now){let dt=Math.min(80,Math.max(0,now-last));last=now;
- if(status==='playing'){fallAccum+=dt;let speed=Math.max(95,750*Math.pow(.84,level-1));if(fallAccum>=speed){fallAccum=0;if(!move(0,1))lock();}}
+ if(status==='playing'){
+   fallAccum+=dt;
+   const speed=Math.max(95,750*Math.pow(.84,level-1));
+   if(fallAccum>=speed){fallAccum=0;move(0,1);}
+   if(grounded()){
+     if(groundedSince===null)groundedSince=now;
+     else if(now-groundedSince>=LOCK_DELAY)lock();
+   }else groundedSince=null;
+ }
  if(particles.length){fctx.clearRect(0,0,300,600);for(const p of particles){p.x+=p.vx;p.y+=p.vy;p.vy+=.065;p.vx*=.99;p.life--;fctx.globalAlpha=Math.max(0,p.life/p.max);fctx.fillStyle=p.color;fctx.fillRect(p.x,p.y,4,4);}fctx.globalAlpha=1;particles=particles.filter(p=>p.life>0);}
  else{fctx.clearRect(0,0,300,600);}
+ if(lockFlash){
+   const age=now-lockFlash.start,remain=Math.max(0,1-age/lockFlash.duration);
+   if(remain<=0)lockFlash=null;
+   else{
+     fctx.save();
+     fctx.globalCompositeOperation='screen';
+     for(const c of lockFlash.cells){
+       if(c.y<0)continue;
+       const x=c.x*SIZE,y=c.y*SIZE;
+       fctx.globalAlpha=remain*.72;
+       fctx.shadowColor=c.color;fctx.shadowBlur=18*remain+4;
+       fctx.fillStyle=c.color;fctx.fillRect(x+2,y+2,SIZE-4,SIZE-4);
+       fctx.globalAlpha=remain*.85;
+       fctx.shadowBlur=8;fctx.strokeStyle='#ffffff';fctx.lineWidth=2;
+       fctx.strokeRect(x+2,y+2,SIZE-4,SIZE-4);
+     }
+     fctx.restore();
+   }
+ }
  requestAnimationFrame(frame);
 }
-function act(kind){if(status!=='playing')return;if(kind==='left')move(-1,0);if(kind==='right')move(1,0);if(kind==='down'){if(!move(0,1))lock();fallAccum=0;}if(kind==='turn')rotate();if(kind==='drop')hardDrop();}
+function act(kind){if(status!=='playing')return;if(kind==='drop'){hardDrop();return;}inputActivity();if(kind==='left')move(-1,0);if(kind==='right')move(1,0);if(kind==='down'){move(0,1);fallAccum=0;}if(kind==='turn')rotate();}
 function bindControl(id,kind,repeat=false){let timeout=null,interval=null,active=false;const el=$(id);
  function clear(){clearTimeout(timeout);clearInterval(interval);timeout=null;interval=null;active=false;}
  el.addEventListener('pointerdown',e=>{e.preventDefault();if(active)return;active=true;try{el.setPointerCapture(e.pointerId)}catch(_){}act(kind);if(repeat){timeout=setTimeout(()=>{interval=setInterval(()=>act(kind),70)},210);}});
