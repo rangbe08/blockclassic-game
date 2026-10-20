@@ -1,0 +1,16 @@
+블록 클래식 PWA (APK 설치 불필요)
+
+[중요] 이 ZIP 파일을 휴대폰에 복사하는 것만으로 PWA 설치가 완료되지는 않습니다.
+PWA의 홈 화면 설치와 오프라인 캐시는 HTTPS 웹주소에서 처음 접속해야 작동합니다.
+
+가장 쉬운 무료 배포 방법: GitHub Pages
+1. GitHub에 로그인한 후 새 PUBLIC 저장소를 만듭니다 (예: blockclassic-game).
+2. 이 ZIP을 압축 해제하여 index.html, sw.js, manifest.webmanifest, icons 폴더를 저장소 최상위에 업로드합니다.
+3. 저장소 Settings > Pages > Build and deployment > Source: Deploy from a branch를 선택합니다.
+4. Branch: main, Folder: /(root) 를 선택하고 Save합니다.
+5. Pages에 표시된 https://...github.io/blockclassic-game/ 주소로 갤럭시 삼성 인터넷 또는 Chrome에서 접속합니다.
+6. 브라우저 메뉴 > 홈 화면에 추가 / 앱 설치를 선택합니다.
+7. 인터넷에 연결된 상태로 게임을 한 번 열고 잠시 기다린 뒤, 비행기 모드에서 홈 화면 아이콘으로 실행해 오프라인 여부를 확인합니다.
+
+주의: GitHub Pages 공개 저장소에 게임 소스가 공개됩니다. 외부 라이브러리/외부 서버 접속 없이 동작하도록 구성했습니다.
+최고 점수는 사용한 브라우저 저장소에 보관되며 브라우저 데이터 삭제 시 사라질 수 있습니다.
